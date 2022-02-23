@@ -1,289 +1,88 @@
 import React, { useContext } from 'react'
-import { FiChevronUp, FiChevronDown } from 'react-icons/fi'
-import Button from '../styles/Button.styled'
-import { WorkdaysContext } from '../context/WorkdaysContext'
-import AddFormStyled from '../styles/AddForm.styled'
-import InputStyled from '../styles/Input.styled'
+import { DatePicker, TimePicker } from '@material-ui/pickers'
 import { InterfaceContext } from '../context/InterfaceContext'
-import { DatePicker } from '@material-ui/pickers'
+import { WorkdaysContext } from '../context/WorkdaysContext'
+import Button from '../styles/Button.styled'
+import InputStyled from '../styles/Input.styled'
+import AddFormStyled from '../styles/AddForm.styled'
 
 const AddForm = () => {
-    const { formPage, setFormPage } = useContext(InterfaceContext)
-    const { weekdays, newWorkingDay, setNewWorkingDay } =
-        useContext(WorkdaysContext)
+    const {
+        newDate,
+        newEnd,
+        newStart,
+        setNewDate,
+        setNewEnd,
+        setNewStart,
+        resetFields,
+        store,
+    } = useContext(WorkdaysContext)
 
-    // ------------------------------------------------------------------
+    const { setModalDisplay } = useContext(InterfaceContext)
 
-    // ------------------------------------------------------------------
-
-    const selectAllText = (event) => {
-        event.currentTarget.select()
-    }
-
-    const convertTimeTo24 = (timeStr) => {
-        const [time, modifier] = timeStr.split(' ')
-        let [hours, minutes] = time.split(':')
-        if (hours === '12') hours = '00'
-        if (modifier === 'PM') hours = parseInt(hours, 10) + 12
-
-        return `${hours}:${minutes}`
-    }
-
-    const saveWorkingDay = (event) => {
+    const save = (event) => {
         event.preventDefault()
 
-        // How many hours are between 2 July 2014 06:50:00 and 2 July 2014 19:00:00?
-        const [end, start] = [
-            new Date(2022, 2, 2, 11, 30),
-            new Date(2022, 2, 2, 8, 30),
-        ]
-
-        const hours = (Math.abs(end - start) / 36e5).toFixed(2)
-        console.log(convertTimeTo24('05:42 PM'))
-        console.log(hours)
-
-        return
-        //-----------------------------------------------
-        const data = new FormData(event.target)
-
-        // Calculate total of worked hours
-        // setWorkingDay({
-        //     day: data.get('day'),
-        //     start: {
-        //         hour: data.get('startHour'),
-        //         minutes: data.get('startMin'),
-        //         period: data.get('startPeriod'),
-        //     },
-        //     end: {
-        //         hour: data.get('endHour'),
-        //         minutes: data.get('endMin'),
-        //         period: data.get('endPeriod'),
-        //     },
-        // })
-
-        // // Set data
-        // console.log(workingDay)
+        // Calculate worked hours
+        let hours
+        let newEndPlusOne = null
+        // e.g.: start at 5 PM, end at 2 AM means the work ended the next day
+        if (newEnd.getTime() < newStart.getTime()) {
+            newEndPlusOne = new Date(newEnd)
+            newEndPlusOne.setDate(newEndPlusOne.getDate() + 1)
+            hours = (Math.abs(newEndPlusOne - newStart) / 36e5).toFixed(2)
+        } else hours = (Math.abs(newEnd - newStart) / 36e5).toFixed(2)
+        // save new day to the state, send newEndPlusOne in case it has changed
+        store(newEndPlusOne)
+        resetFields()
+        setModalDisplay(false)
     }
 
     return (
-        <AddFormStyled onSubmit={saveWorkingDay}>
+        <AddFormStyled onSubmit={save}>
             <fieldset name='weekday'>
                 <legend>Seleccionar día:</legend>
-                <label htmlFor='day'>Selecciona el día:</label>
+                <label htmlFor='date'>Selecciona el día:</label>
                 <DatePicker
-                    value={newWorkingDay}
-                    onChange={setNewWorkingDay}
-                    id='day'
+                    autoOk
+                    format={"EEEE, d 'de' MMMM"}
+                    disableToolbar
+                    variant='inline'
+                    value={newDate}
+                    id='date'
+                    name='date'
+                    onChange={setNewDate}
+                    required
                 ></DatePicker>
             </fieldset>
 
-            {
-                /* Starting time */
-                formPage === 1 && (
-                    <fieldset name='starting'>
-                        <legend>Hora de entrada</legend>
-                        <div className='starting-container'>
-                            <h4 className='title'>
-                                Hora de <span>entrada</span>
-                            </h4>
-                            <label htmlFor='startHour' className='hoursLabel'>
-                                Hora
-                            </label>
-                            <div className='hours'>
-                                <InputStyled
-                                    style={{ order: '1' }}
-                                    type='tel'
-                                    id='startHour'
-                                    min='01'
-                                    max='12'
-                                    pattern='^[0-9]{2}$'
-                                    defaultValue='06'
-                                    required
-                                    name='startHour'
-                                    onClick={selectAllText}
-                                />
-                                <Button arrow type='button'>
-                                    <FiChevronUp />
-                                </Button>
-                                <Button
-                                    arrow
-                                    type='button'
-                                    style={{ order: '2' }}
-                                >
-                                    <FiChevronDown />
-                                </Button>
-                            </div>
+            <fieldset>
+                <legend>Hora de entrada</legend>
+                <label htmlFor='start'>Hora de entrada:</label>
+                <TimePicker
+                    value={newStart}
+                    onChange={setNewStart}
+                    id='start'
+                    name='start'
+                    required
+                />
+            </fieldset>
 
-                            <div className='separator'>
-                                <h1>:</h1>
-                            </div>
+            <fieldset>
+                <legend>Hora de salida</legend>
+                <label htmlFor='end'>Hora de salida:</label>
+                <TimePicker
+                    value={newEnd}
+                    onChange={setNewEnd}
+                    id='end'
+                    name='end'
+                    required
+                />
+            </fieldset>
 
-                            <label htmlFor='startMin' className='minutesLabel'>
-                                Minutos
-                            </label>
-                            <div className='minutes'>
-                                <InputStyled
-                                    style={{ order: '1' }}
-                                    type='tel'
-                                    id='startMin'
-                                    min='00'
-                                    max='59'
-                                    pattern='^[0-9]{2}$'
-                                    defaultValue={'00'}
-                                    required
-                                    name='startMin'
-                                    onClick={selectAllText}
-                                />
-                                <Button arrow type='button'>
-                                    <FiChevronUp />
-                                </Button>
-                                <Button
-                                    arrow
-                                    type='button'
-                                    style={{ order: '2' }}
-                                >
-                                    <FiChevronDown />
-                                </Button>
-                            </div>
-
-                            <div className='period'>
-                                <input
-                                    type='radio'
-                                    id='startAM'
-                                    value='AM'
-                                    name='startPeriod'
-                                />
-                                <label htmlFor='startAM'>AM</label>
-
-                                <input
-                                    type='radio'
-                                    id='startPM'
-                                    value='PM'
-                                    defaultChecked
-                                    name='startPeriod'
-                                />
-                                <label htmlFor='startPM'>PM</label>
-                            </div>
-                        </div>
-                    </fieldset>
-                )
-            }
-
-            {
-                /* Ending time */
-                formPage === 2 && (
-                    <fieldset name='ending'>
-                        <div className='ending-container'>
-                            <legend>Hora de salida</legend>
-                            <h4 className='title'>
-                                Hora de <span>salida</span>
-                            </h4>
-                            <label htmlFor='endHour' className='hoursLabel'>
-                                Hora
-                            </label>
-                            <div className='hours'>
-                                <InputStyled
-                                    style={{ order: '1' }}
-                                    onClick={selectAllText}
-                                    type='tel'
-                                    id='endHour'
-                                    min='01'
-                                    max='12'
-                                    pattern='^[0-9]{2}$'
-                                    defaultValue={'12'}
-                                    required
-                                    name='endHour'
-                                />
-                                <Button arrow type='button'>
-                                    <FiChevronUp />
-                                </Button>
-                                <Button
-                                    arrow
-                                    type='button'
-                                    style={{ order: '2' }}
-                                >
-                                    <FiChevronDown />
-                                </Button>
-                            </div>
-                            <div className='separator'>
-                                <h1>:</h1>
-                            </div>
-                            <label htmlFor='endMin' className='minutesLabel'>
-                                Minutes:
-                            </label>
-                            <div className='minutes'>
-                                <InputStyled
-                                    style={{ order: '1' }}
-                                    type='tel'
-                                    id='endMin'
-                                    min='01'
-                                    max='59'
-                                    pattern='^[0-9]{2}$'
-                                    defaultValue={'00'}
-                                    required
-                                    name='endMin'
-                                    onClick={selectAllText}
-                                />
-                                <Button arrow type='button'>
-                                    <FiChevronUp />
-                                </Button>
-                                <Button
-                                    arrow
-                                    type='button'
-                                    style={{ order: '2' }}
-                                >
-                                    <FiChevronDown />
-                                </Button>
-                            </div>
-
-                            <div className='period'>
-                                <input
-                                    type='radio'
-                                    id='endAM'
-                                    value='AM'
-                                    name='endPeriod'
-                                />
-                                <label htmlFor='endAM'>AM</label>
-
-                                <input
-                                    type='radio'
-                                    id='endPM'
-                                    value='PM'
-                                    name='endPeriod'
-                                    defaultChecked
-                                />
-                                <label htmlFor='endPM'>PM</label>
-                            </div>
-                        </div>
-                    </fieldset>
-                )
-            }
-
-            <div className='form-navigation'>
-                <Button
-                    small
-                    transparent
-                    type='button'
-                    onClick={() => {
-                        setFormPage(1)
-                    }}
-                >
-                    Atrás
-                </Button>
-                <Button color='primary' type='submit'>
-                    Guardar
-                </Button>
-                <Button
-                    small
-                    transparent
-                    type='button'
-                    onClick={() => {
-                        setFormPage(2)
-                    }}
-                >
-                    Siguiente
-                </Button>
-            </div>
+            <Button color='primary' type='submit'>
+                Guardar
+            </Button>
         </AddFormStyled>
     )
 }

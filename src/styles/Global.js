@@ -32,6 +32,23 @@ input::-webkit-inner-spin-button {
 input::-webkit-calendar-picker-indicator {
     opacity: 100;
 }
+
+.MuiInputBase-input {
+    color: hsl(${({ theme }) => theme.colors.bluedGray}) !important;
+    background: hsl(${({ theme }) => theme.colors.tableRowBg}) !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 5px !important;
+    border: none !important;
+    font-family: var(--font-body) !important;
+    font-size: 14px !important;
+    margin-top: 0.5rem !important;
+    text-align: center !important;
+}
+
+.MuiInput-underline::after,
+.MuiInput-underline::before {
+    display: none !important;
+}
 `
 
 export const themes = {
