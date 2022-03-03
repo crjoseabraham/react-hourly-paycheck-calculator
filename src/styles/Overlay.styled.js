@@ -5,7 +5,7 @@ const Overlay = styled.div`
     top: 0;
     left: 0;
     background-color: hsla(${({ theme }) => theme.colors.bg}, 0.75);
-    z-index: 2;
+    z-index: 9;
     width: 100%;
     height: 100%;
     display: ${({ show }) => (show ? 'block' : 'none')};

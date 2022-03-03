@@ -3,9 +3,10 @@ import styled, { ThemeProvider } from 'styled-components'
 import { WorkdaysProvider } from './context/WorkdaysContext'
 import { InterfaceProvider } from './context/InterfaceContext'
 import { GlobalStyles, themes } from './styles/Global'
-import FormContainer from './components/FormContainer'
+import DaysList from './components/DaysList'
 import Modal from './components/Modal'
 import Navbar from './components/Navbar'
+import Summary from './components/Summary'
 
 const App = () => {
     const [theme, setTheme] = useState('dark')
@@ -19,7 +20,8 @@ const App = () => {
                     <Wrapper>
                         <Navbar />
                         <Heading>Calculadora de salario por hora</Heading>
-                        <FormContainer />
+                        <Summary />
+                        <DaysList />
                     </Wrapper>
                 </ThemeProvider>
             </InterfaceProvider>

@@ -7,7 +7,7 @@ const Navigation = styled.nav`
     padding-bottom: 20px;
     position: fixed;
     bottom: 0;
-    z-index: 10;
+    z-index: 5;
 
     & > * {
         float: right;

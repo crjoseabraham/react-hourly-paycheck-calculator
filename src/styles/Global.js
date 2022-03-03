@@ -22,18 +22,8 @@ body {
     color: hsl(${({ theme }) => theme.colors.text});
 }
 
-// Reset input numbers
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input::-webkit-calendar-picker-indicator {
-    opacity: 100;
-}
-
-.MuiInputBase-input {
+.MuiInputBase-input,
+form input {
     color: hsl(${({ theme }) => theme.colors.bluedGray}) !important;
     background: hsl(${({ theme }) => theme.colors.tableRowBg}) !important;
     padding: 0.5rem 0.75rem !important;
@@ -45,9 +35,23 @@ input::-webkit-calendar-picker-indicator {
     text-align: center !important;
 }
 
+input:focus {
+    outline: none;
+    background: hsl(${({ theme }) => theme.colors.tableRowBgHover}) !important;
+}
+
 .MuiInput-underline::after,
 .MuiInput-underline::before {
     display: none !important;
+}
+
+.main-container,
+.summary {
+    padding: 1.2rem 1.5rem 2rem;
+    background-color: hsl(${(props) => props.theme.colors.cardBg});
+    border-radius: 10px;
+    box-shadow: hsla(0, 0, 0, 0.1) 0px 10px 50px;
+    max-width: 800px;
 }
 `
 
@@ -64,6 +68,7 @@ export const themes = {
             gray: '300, 0%, 43%',
             bluedGray: '240, 6%, 56%',
             danger: '4, 90%, 63%',
+            yellow: '55, 18%, 51%',
         },
     },
     light: {

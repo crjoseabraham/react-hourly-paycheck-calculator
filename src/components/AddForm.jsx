@@ -3,10 +3,10 @@ import { DatePicker, TimePicker } from '@material-ui/pickers'
 import { InterfaceContext } from '../context/InterfaceContext'
 import { WorkdaysContext } from '../context/WorkdaysContext'
 import Button from '../styles/Button.styled'
-import InputStyled from '../styles/Input.styled'
 import AddFormStyled from '../styles/AddForm.styled'
 
 const AddForm = () => {
+    const { setModalDisplay } = useContext(InterfaceContext)
     const {
         newDate,
         newEnd,
@@ -18,22 +18,10 @@ const AddForm = () => {
         store,
     } = useContext(WorkdaysContext)
 
-    const { setModalDisplay } = useContext(InterfaceContext)
-
     const save = (event) => {
         event.preventDefault()
-
-        // Calculate worked hours
-        let hours
-        let newEndPlusOne = null
-        // e.g.: start at 5 PM, end at 2 AM means the work ended the next day
-        if (newEnd.getTime() < newStart.getTime()) {
-            newEndPlusOne = new Date(newEnd)
-            newEndPlusOne.setDate(newEndPlusOne.getDate() + 1)
-            hours = (Math.abs(newEndPlusOne - newStart) / 36e5).toFixed(2)
-        } else hours = (Math.abs(newEnd - newStart) / 36e5).toFixed(2)
-        // save new day to the state, send newEndPlusOne in case it has changed
-        store(newEndPlusOne)
+        const form = new FormData(event.target)
+        store(form)
         resetFields()
         setModalDisplay(false)
     }
@@ -77,6 +65,31 @@ const AddForm = () => {
                     id='end'
                     name='end'
                     required
+                />
+            </fieldset>
+
+            <fieldset>
+                <legend>Deuda</legend>
+                <label htmlFor='debt'>Deuda:</label>
+                <input
+                    type='number'
+                    name='debt'
+                    id='debt'
+                    min='0'
+                    step='0.01'
+                    defaultValue={0}
+                />
+            </fieldset>
+
+            <fieldset>
+                <legend>Valor de la hora</legend>
+                <label htmlFor='ratio'>Valor de la hora:</label>
+                <input
+                    type='number'
+                    step='.1'
+                    name='ratio'
+                    id='ratio'
+                    defaultValue={0.6}
                 />
             </fieldset>
 
