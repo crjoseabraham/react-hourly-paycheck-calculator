@@ -21,6 +21,11 @@ const DaysListStyled = styled.ul`
         justify-content: space-between;
         padding: 0.5rem 0;
         color: hsl(${({ theme }) => theme.colors.danger});
+
+        .icon {
+            font-size: 11px;
+            display: flex;
+        }
     }
 
     .day-info {

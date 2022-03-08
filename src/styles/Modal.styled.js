@@ -6,7 +6,7 @@ const ModalStyled = styled.div`
     color: hsl(${({ theme: { colors } }) => colors.text});
     padding: 20px 30px;
     font-size: 14px;
-    width: 18rem;
+    width: 20rem;
     position: absolute;
     top: 50%;
     left: 50%;

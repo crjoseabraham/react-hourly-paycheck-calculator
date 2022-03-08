@@ -10,11 +10,14 @@ export const WorkdaysProvider = ({ children }) => {
     const [newStart, setNewStart] = useState(new Date())
     const [newEnd, setNewEnd] = useState(new Date())
     const [newBreak, setNewBreak] = useState(0)
+    const [newRatio, setNewRatio] = useState(0.6)
+    const [newDebt, setNewDebt] = useState(0)
 
-    const [weeks, setWeeks] = useLocalStorage('weeks', '')
+    // Coming from hooks
+    const [weeks, setWeeks] = useLocalStorage('weeks', '') // TODO:
     const [days, setDays] = useLocalStorage('days', '')
-    const [hours, calculate] = useGetWorkedHours(newStart, newEnd)
-
+    const [hours, calculateHours] = useGetWorkedHours(newStart, newEnd)
+    // Format options
     const options = {
         weekday: 'long',
         year: 'numeric',
@@ -22,40 +25,26 @@ export const WorkdaysProvider = ({ children }) => {
         day: 'numeric',
     }
 
-    // TODO: show(), edit(), update()
-    /**
-        TODO: create weeks array
-        weeks = {
-            5: [
-                {dia 1},
-                {dia 2},
-                {dia 3}
-            ],
-            6: [
-                {dia 1},
-                {dia 2},
-                {dia 3}
-            ],
-        }
-    */
-
+    // Re-calculate worked hours when start/end time changes
     useEffect(() => {
-        calculate(newStart, newEnd)
+        calculateHours(newStart, newEnd)
     }, [newStart, newEnd])
 
-    const store = (form) => {
+    // Store a new day in the array
+    const store = () => {
         const newDaysArray = [...days]
 
         newDaysArray.push({
+            id: Date.now(),
             date: newDate.toLocaleDateString(undefined, options),
             start: format(newStart, 'HH:mm aa'),
             end: format(newEnd, 'HH:mm aa'),
             hours,
-            debt: parseFloat(form.get('debt')).toFixed(2),
-            ratio: parseFloat(form.get('ratio')).toFixed(2),
+            debt: parseFloat(newDebt).toFixed(2),
+            ratio: newRatio,
             break: newBreak,
             totalEarned: parseFloat(
-                (hours - newBreak) * parseFloat(form.get('ratio'))
+                (hours - newBreak) * newRatio - newDebt
             ).toFixed(2),
             timestamps: {
                 date: newDate.getTime(),
@@ -67,16 +56,21 @@ export const WorkdaysProvider = ({ children }) => {
         setDays(newDaysArray)
     }
 
+    // Delete a day from the array
     const destroy = (e) => {
         let id = +e.target.closest('li').id
-        let newDaysArray = days.filter((el) => days.indexOf(el) !== id)
+        let newDaysArray = days.filter((el) => el.id !== id)
         setDays(newDaysArray)
     }
 
+    // Reset form fields
     const resetFields = () => {
         setNewDate(new Date())
         setNewStart(new Date())
         setNewEnd(new Date())
+        setNewBreak(0)
+        setNewRatio(0.6)
+        setNewDebt(0)
     }
 
     return (
@@ -86,13 +80,19 @@ export const WorkdaysProvider = ({ children }) => {
                 newDate,
                 newEnd,
                 newStart,
-                destroy,
-                resetFields,
+                newBreak,
+                newRatio,
+                newDebt,
                 setDays,
                 setNewDate,
                 setNewEnd,
                 setNewStart,
+                setNewBreak,
+                setNewDebt,
+                setNewRatio,
                 store,
+                destroy,
+                resetFields,
             }}
         >
             {children}

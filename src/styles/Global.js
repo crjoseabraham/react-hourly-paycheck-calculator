@@ -20,6 +20,16 @@ body {
     font-size: 14px;
     background-color: hsl(${({ theme }) => theme.colors.bg});
     color: hsl(${({ theme }) => theme.colors.text});
+    padding-bottom: 3rem;
+}
+
+hr {
+    border: none;
+    border-top: 1px dashed #8c8b8b;
+}
+
+.danger {
+    color: hsl(${({ theme }) => theme.colors.danger});
 }
 
 .MuiInputBase-input,
@@ -27,10 +37,10 @@ form input {
     color: hsl(${({ theme }) => theme.colors.bluedGray}) !important;
     background: hsl(${({ theme }) => theme.colors.tableRowBg}) !important;
     padding: 0.5rem 0.75rem !important;
-    border-radius: 5px !important;
+    border-radius: 3px !important;
     border: none !important;
     font-family: var(--font-body) !important;
-    font-size: 14px !important;
+    font-size: 1.1rem !important;
     margin-top: 0.5rem !important;
     text-align: center !important;
 }
@@ -47,11 +57,12 @@ input:focus {
 
 .main-container,
 .summary {
-    padding: 1.2rem 1.5rem 2rem;
+    width: 90vw;
+    max-width: 400px;
+    padding: 1.2rem 1.5rem;
     background-color: hsl(${(props) => props.theme.colors.cardBg});
-    border-radius: 10px;
+    border-radius: 6px;
     box-shadow: hsla(0, 0, 0, 0.1) 0px 10px 50px;
-    max-width: 800px;
 }
 `
 

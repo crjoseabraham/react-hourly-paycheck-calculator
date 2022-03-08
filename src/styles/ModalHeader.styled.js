@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const ModalHeaderStyled = styled.div`
-    border-bottom: 1px solid hsl(${({ theme }) => theme.colors.bluedGray});
+    border-bottom: 1px solid hsl(${({ theme }) => theme.colors.gray});
     padding: 1rem 0 0.75rem;
     position: relative;
 

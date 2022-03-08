@@ -1,15 +1,18 @@
 import React, { useContext } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { InterfaceContext } from '../context/InterfaceContext'
+import { WorkdaysContext } from '../context/WorkdaysContext'
 import Button from '../styles/Button.styled'
 import Navigation from '../styles/Navigation.styled'
 
 const Navbar = () => {
-    const { setModalContent, modalDisplay, setModalDisplay } =
+    const { setModalTitle, modalDisplay, setModalDisplay } =
         useContext(InterfaceContext)
 
+    const { days, setDays } = useContext(WorkdaysContext)
+
     const displayAddForm = () => {
-        setModalContent('AddForm')
+        setModalTitle('Agregar un día de trabajo')
         setModalDisplay(!modalDisplay)
     }
 
@@ -17,8 +20,19 @@ const Navbar = () => {
         <Navigation>
             <Button color='primary' size='large' onClick={displayAddForm}>
                 <FiPlus />
-                &nbsp;Agregar jornada
+                &nbsp;Agregar día
             </Button>
+            {days.length > 0 && (
+                <Button
+                    color='danger'
+                    size='large'
+                    onClick={() => {
+                        setDays([])
+                    }}
+                >
+                    Limpiar
+                </Button>
+            )}
         </Navigation>
     )
 }

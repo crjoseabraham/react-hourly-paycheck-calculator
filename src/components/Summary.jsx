@@ -8,15 +8,15 @@ import TableStyled from '../styles/Table.styled'
 const Summary = () => {
     const { days } = useContext(WorkdaysContext)
     const [hours, debt, totalInDollars, getSummary] = useSummary()
-    const [totalInBolivars, setTotalInBolivars] = useState(
-        parseFloat(totalInDollars * 4.62).toFixed(2)
-    )
     const [tasaBolivares, setTasaBolivares] = useState(4.62)
-
+    const [totalInBolivars, setTotalInBolivars] = useState(
+        parseFloat(totalInDollars * tasaBolivares).toFixed(2)
+    )
+    // Re-calculate summary data anytime there's a change in [days]
     useEffect(() => {
         getSummary(days)
     }, [days])
-
+    // Re-calculate total in VE Bolivars when the total in $ changes
     useEffect(() => {
         setTasaBolivares(document.getElementById('tasaBs').value)
         setTotalInBolivars(
@@ -43,17 +43,17 @@ const Summary = () => {
 
                 <thead>
                     <tr>
-                        <th>Horas Trabajadas</th>
-                        <th>Deuda</th>
-                        <th>Total $$</th>
-                        <th>Total Bs.</th>
+                        <th>Total Horas</th>
+                        <th>Deuda Pagada</th>
+                        <th>Total en Dólares</th>
+                        <th>Total en Bs.</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{hours}</td>
                         <td>${debt}</td>
-                        <td>${totalInDollars - debt}</td>
+                        <td>${totalInDollars}</td>
                         <td>Bs.{totalInBolivars}</td>
                     </tr>
                 </tbody>
@@ -75,9 +75,14 @@ const Summary = () => {
 
 const FormBs = styled.form`
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding-top: 1rem;
+    gap: 1rem;
+
+    input {
+        max-width: 8rem;
+    }
 `
 
 export default Summary

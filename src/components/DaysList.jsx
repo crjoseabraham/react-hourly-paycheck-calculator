@@ -4,27 +4,33 @@ import { WorkdaysContext } from '../context/WorkdaysContext'
 import Button from '../styles/Button.styled'
 import DaysListStyled from '../styles/DaysList.styled'
 import TableStyled from '../styles/Table.styled'
+import Navbar from './Navbar'
 
 const DaysList = () => {
     const { days, destroy } = useContext(WorkdaysContext)
 
     return (
         <div className='main-container'>
-            {!days ? (
-                <h3>Undefined, dude</h3>
+            <Navbar />
+
+            {days.length < 1 ? (
+                <p>Agrega un día para hacer los cálculos</p>
             ) : (
                 <DaysListStyled>
-                    {days.map((day, index) => (
-                        <li key={index} id={index}>
+                    {days.map((day) => (
+                        <li key={day.id} id={day.id}>
                             <div className='red-zone'>
                                 <Button inline color='danger' onClick={destroy}>
                                     <FiTrash2 />
                                 </Button>
                                 <span className='icon'>
-                                    {day.debt > 0 && '-$'}
+                                    {day.debt > 0 && `-${day.debt}$`}
                                 </span>
                                 <span className='icon'>
-                                    {day.break > 0 && <FiClock />}
+                                    {day.break > 0 && [
+                                        `-${day.break}\u00A0`,
+                                        <FiClock />,
+                                    ]}
                                 </span>
                             </div>
                             <div className='day-info'>

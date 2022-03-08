@@ -5,7 +5,6 @@ import { InterfaceProvider } from './context/InterfaceContext'
 import { GlobalStyles, themes } from './styles/Global'
 import DaysList from './components/DaysList'
 import Modal from './components/Modal'
-import Navbar from './components/Navbar'
 import Summary from './components/Summary'
 
 const App = () => {
@@ -18,7 +17,6 @@ const App = () => {
                     <GlobalStyles />
                     <Modal />
                     <Wrapper>
-                        <Navbar />
                         <Heading>Calculadora de salario por hora</Heading>
                         <Summary />
                         <DaysList />
@@ -31,16 +29,18 @@ const App = () => {
 
 const Wrapper = styled.div`
     margin: auto;
-    width: 90vw;
-    max-width: 1000px;
-    padding: 30px 0;
+    width: 350px;
+    padding-top: 2rem;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 
 const Heading = styled.h1`
     font-weight: 700;
     font-size: 140%;
-    color: ${({ theme }) => theme.colors.text};
+    color: hsl(${({ theme }) => theme.colors.primary});
     padding-bottom: 1.8rem;
 `
 
