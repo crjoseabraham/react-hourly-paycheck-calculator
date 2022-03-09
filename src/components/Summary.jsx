@@ -1,33 +1,45 @@
 import React, { useState, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { WorkdaysContext } from '../context/WorkdaysContext'
-import { useSummary } from '../hooks/useSummary'
 import SummaryStyled from '../styles/Summary.styled'
 import TableStyled from '../styles/Table.styled'
 
 const Summary = () => {
     const { days } = useContext(WorkdaysContext)
-    const [hours, debt, totalInDollars, getSummary] = useSummary()
+
+    const [sumHours, setSumHours] = useState(0)
+    const [sumDebt, setSumDebt] = useState(0)
+    const [totalInDollars, setTotalInDollars] = useState(0)
     const [tasaBolivares, setTasaBolivares] = useState(4.62)
     const [totalInBolivars, setTotalInBolivars] = useState(
         parseFloat(totalInDollars * tasaBolivares).toFixed(2)
     )
+
     // Re-calculate summary data anytime there's a change in [days]
     useEffect(() => {
-        getSummary(days)
+        setSumHours(
+            days.reduce((total, obj) => parseFloat(obj.hours) + total, 0)
+        )
+        setSumDebt(days.reduce((total, obj) => parseFloat(obj.debt) + total, 0))
+        setTotalInDollars(
+            days
+                .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
+                .toFixed(2)
+        )
     }, [days])
+
     // Re-calculate total in VE Bolivars when the total in $ changes
     useEffect(() => {
         setTasaBolivares(document.getElementById('tasaBs').value)
         setTotalInBolivars(
-            parseFloat(tasaBolivares * (totalInDollars - debt)).toFixed(2)
+            parseFloat(tasaBolivares * (totalInDollars - sumDebt)).toFixed(2)
         )
     }, [totalInDollars])
 
     const calculateBolivars = ({ target }) => {
         setTasaBolivares(target.value)
         setTotalInBolivars(
-            parseFloat(target.value * (totalInDollars - debt)).toFixed(2)
+            parseFloat(target.value * (totalInDollars - sumDebt)).toFixed(2)
         )
     }
 
@@ -51,8 +63,8 @@ const Summary = () => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{hours}</td>
-                        <td>${debt}</td>
+                        <td>{sumHours}</td>
+                        <td>${sumDebt}</td>
                         <td>${totalInDollars}</td>
                         <td>Bs.{totalInBolivars}</td>
                     </tr>
