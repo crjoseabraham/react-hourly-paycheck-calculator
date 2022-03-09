@@ -16,17 +16,17 @@ const Summary = () => {
     )
 
     // Re-calculate summary data anytime there's a change in [days]
-    useEffect(() => {
-        setSumHours(
-            days.reduce((total, obj) => parseFloat(obj.hours) + total, 0)
-        )
-        setSumDebt(days.reduce((total, obj) => parseFloat(obj.debt) + total, 0))
-        setTotalInDollars(
-            days
-                .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
-                .toFixed(2)
-        )
-    }, [days])
+    // useEffect(() => {
+    //     setSumHours(
+    //         days.reduce((total, obj) => parseFloat(obj.hours) + total, 0)
+    //     )
+    //     setSumDebt(days.reduce((total, obj) => parseFloat(obj.debt) + total, 0))
+    //     setTotalInDollars(
+    //         days
+    //             .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
+    //             .toFixed(2)
+    //     )
+    // }, [days])
 
     // Re-calculate total in VE Bolivars when the total in $ changes
     useEffect(() => {
