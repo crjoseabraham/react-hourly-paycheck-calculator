@@ -10,37 +10,30 @@ const Summary = () => {
     const [sumHours, setSumHours] = useState(0)
     const [sumDebt, setSumDebt] = useState(0)
     const [totalInDollars, setTotalInDollars] = useState(0)
-    const [tasaBolivares, setTasaBolivares] = useState(4.62)
-    const [totalInBolivars, setTotalInBolivars] = useState(
-        parseFloat(totalInDollars * tasaBolivares).toFixed(2)
-    )
+    const [totalInBolivars, setTotalInBolivars] = useState(0)
 
     // Re-calculate summary data anytime there's a change in [days]
-    // useEffect(() => {
-    //     setSumHours(
-    //         days.reduce((total, obj) => parseFloat(obj.hours) + total, 0)
-    //     )
-    //     setSumDebt(days.reduce((total, obj) => parseFloat(obj.debt) + total, 0))
-    //     setTotalInDollars(
-    //         days
-    //             .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
-    //             .toFixed(2)
-    //     )
-    // }, [days])
-
-    // Re-calculate total in VE Bolivars when the total in $ changes
     useEffect(() => {
-        setTasaBolivares(document.getElementById('tasaBs').value)
-        setTotalInBolivars(
-            parseFloat(tasaBolivares * (totalInDollars - sumDebt)).toFixed(2)
-        )
-    }, [totalInDollars])
+        let sumHours = 0
+        let sumDebt = 0
+        let totalInDollars = 0
+        let tasaBolivares = parseFloat(document.getElementById('tasaBs').value)
+
+        days.forEach((day) => {
+            sumHours += parseFloat(day.hours)
+            sumDebt += parseFloat(day.debt)
+            totalInDollars += parseFloat(day.totalEarned)
+        })
+
+        setSumHours(sumHours.toFixed(2))
+        setSumDebt(sumDebt.toFixed(2))
+        setTotalInDollars(totalInDollars.toFixed(2))
+        setTotalInBolivars((totalInDollars * tasaBolivares).toFixed(2))
+    }, [days])
 
     const calculateBolivars = ({ target }) => {
-        setTasaBolivares(target.value)
-        setTotalInBolivars(
-            parseFloat(target.value * (totalInDollars - sumDebt)).toFixed(2)
-        )
+        let tasaBolivares = parseFloat(target.value)
+        setTotalInBolivars((totalInDollars * tasaBolivares).toFixed(2))
     }
 
     return (
@@ -76,7 +69,7 @@ const Summary = () => {
                     type='number'
                     name='tasaBs'
                     id='tasaBs'
-                    defaultValue={tasaBolivares}
+                    defaultValue={4.5}
                     onClick={({ target }) => target.select()}
                     onChange={calculateBolivars}
                 />
