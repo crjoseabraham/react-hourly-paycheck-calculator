@@ -3,30 +3,32 @@ import { WorkdaysContext } from '../context/WorkdaysContext'
 
 export function useSummary() {
     const { days } = useContext(WorkdaysContext)
-    const [hours, setHours] = useState(() =>
-        days.reduce((total, obj) => parseFloat(obj.hours) + total, 0)
-    )
-    const [debt, setDebt] = useState(() =>
-        days.reduce((total, obj) => parseFloat(obj.debt) + total, 0)
-    )
-    const [totalInDollars, setTotalInDollars] = useState(() =>
-        days
-            .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
-            .toFixed(2)
-    )
+    let sumHours = days.reduce((total, obj) => parseFloat(obj.hours) + total, 0)
+    let sumDebt = days.reduce((total, obj) => parseFloat(obj.debt) + total, 0)
+    let sumTotalInDollars = days
+        .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
+        .toFixed(2)
+
+    const [hours, setHours] = useState(sumHours)
+    const [debt, setDebt] = useState(sumDebt)
+    const [totalInDollars, setTotalInDollars] = useState(sumTotalInDollars)
 
     const getSummary = (days) => {
-        setHours(() =>
-            days.reduce((total, obj) => parseFloat(obj.hours) + total, 0)
+        let sumHours = days.reduce(
+            (total, obj) => parseFloat(obj.hours) + total,
+            0
         )
-        setDebt(() =>
-            days.reduce((total, obj) => parseFloat(obj.debt) + total, 0)
+        let sumDebt = days.reduce(
+            (total, obj) => parseFloat(obj.debt) + total,
+            0
         )
-        setTotalInDollars(() =>
-            days
-                .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
-                .toFixed(2)
-        )
+        let sumTotalInDollars = days
+            .reduce((total, obj) => parseFloat(obj.totalEarned) + total, 0)
+            .toFixed(2)
+
+        setHours(sumHours)
+        setDebt(sumDebt)
+        setTotalInDollars(sumTotalInDollars)
     }
 
     return [hours, debt, totalInDollars, getSummary]
