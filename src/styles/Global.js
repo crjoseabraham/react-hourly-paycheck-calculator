@@ -62,7 +62,7 @@ input:focus {
     padding: 1.2rem 1.5rem;
     background-color: hsl(${(props) => props.theme.colors.cardBg});
     border-radius: 6px;
-    box-shadow: hsla(0, 0, 0, 0.1) 0px 10px 50px;
+    box-shadow: 0px 2px 10px rgb(0 0 0 / 51%);
 }
 `
 
@@ -84,10 +84,17 @@ export const themes = {
     },
     light: {
         colors: {
-            bg: 'hsl(221, 221, 221)',
-            text: 'hsl(34, 40, 49)',
-            primary: '#F05454',
-            secondary: '#30475E',
+            bg: '221, 221%, 221%',
+            cardBg: '0, 0%, 88%',
+            tableRowBg: '167, 2%, 81%',
+            tableRowBgHover: '157, 13%, 68%',
+            text: '180, 5%, 16%',
+            primary: '159, 89%, 37%',
+            primaryLight: '160, 91%, 44%',
+            danger: '4, 90%, 63%',
+            gray: '300, 0%, 43%',
+            bluedGray: '240, 6%, 56%',
+            yellow: '55, 25%, 35%',
         },
     },
 }

@@ -6,9 +6,17 @@ import { GlobalStyles, themes } from './styles/Global'
 import DaysList from './components/DaysList'
 import Modal from './components/Modal'
 import Summary from './components/Summary'
+import ThemeSwitcher from './components/ThemeSwitcher'
+import { useLocalStorage } from './hooks/useLocalStorage'
+import { useEffect } from 'react'
 
 const App = () => {
-    const [theme, setTheme] = useState('dark')
+    const [savedTheme, setSavedTheme] = useLocalStorage('theme', 'light')
+    const [theme, setTheme] = useState(savedTheme)
+
+    useEffect(() => {
+        setTheme(savedTheme)
+    }, [savedTheme])
 
     return (
         <WorkdaysProvider>
@@ -17,6 +25,10 @@ const App = () => {
                     <GlobalStyles />
                     <Modal />
                     <Wrapper>
+                        <ThemeSwitcher
+                            savedTheme={savedTheme}
+                            setSavedTheme={setSavedTheme}
+                        />
                         <Heading>Calculadora de salario por hora</Heading>
                         <Summary />
                         <DaysList />
@@ -41,7 +53,7 @@ const Heading = styled.h1`
     font-weight: 700;
     font-size: 140%;
     color: hsl(${({ theme }) => theme.colors.primary});
-    padding-bottom: 1.8rem;
+    padding: 1rem 0;
 `
 
 export default App
