@@ -84,7 +84,7 @@ export const themes = {
     },
     light: {
         colors: {
-            bg: '221, 221%, 221%',
+            bg: '0, 0%, 97%',
             cardBg: '0, 0%, 88%',
             tableRowBg: '167, 2%, 81%',
             tableRowBgHover: '157, 13%, 68%',

@@ -8,13 +8,11 @@ import DateFnsUtils from '@date-io/date-fns'
 import esLocale from 'date-fns/locale/es'
 
 ReactDOM.render(
-    <React.StrictMode>
-        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
-            <Router>
-                <App />
-            </Router>
-        </MuiPickersUtilsProvider>
-    </React.StrictMode>,
+    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
+        <Router>
+            <App />
+        </Router>
+    </MuiPickersUtilsProvider>,
     document.getElementById('root')
 )
 
