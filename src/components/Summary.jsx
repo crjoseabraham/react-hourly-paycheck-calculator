@@ -19,11 +19,11 @@ const Summary = () => {
         let totalInDollars = 0
         let tasaBolivares = parseFloat(document.getElementById('tasaBs').value)
 
-        days.forEach((day) => {
+        for (const day of days) {
             sumHours += parseFloat(day.hours)
             sumDebt += parseFloat(day.debt)
             totalInDollars += parseFloat(day.totalEarned)
-        })
+        }
 
         setSumHours(sumHours.toFixed(2))
         setSumDebt(sumDebt.toFixed(2))
